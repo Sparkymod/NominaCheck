@@ -3,17 +3,27 @@
 @using NominaCheck.Data.Services
 @using NominaCheck.Pages.Components
 
-@inject TipoDepartamentoServices TipoDepartamentoServices
+@inject TiposEmpleadoServices TipoDepartamentoServices
 @inject DepartamentoServices DepartamentoServices
+@inject CargosServices CargosServices
 
-<div style="display: flex; gap: 3rem;">
-    <!-- Tipos empleado -->
+<!-- Tipos empleado -->
+<div class="component-box">
     <CascadingValue Value="@TipoDepartamentoServices">
         <AddTiposEmpleado />
     </CascadingValue>
+</div>
 
-    <!-- Departamento -->
+<!-- Departamento -->
+<div class="component-box">
     <CascadingValue Value="@DepartamentoServices">
         <AddDepartamento />
+    </CascadingValue>
+</div>
+
+<!-- Cargos -->
+<div class="component-box">
+    <CascadingValue Value="@CargosServices">
+        <AddCargos />
     </CascadingValue>
 </div>

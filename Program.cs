@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using NominaCheck.Data.Services;
 using NominaCheck.Data.Extensions;
+using Serilog;
+using NominaCheck;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddAllServicesAvailable();
+builder.Host.UseSerilog(Settings.InitializeSerilog());
 
 var app = builder.Build();
 

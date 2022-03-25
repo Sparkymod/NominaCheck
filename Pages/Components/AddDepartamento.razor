@@ -14,7 +14,7 @@
                         <input type="number" @bind="@CodDepartamento" style="width: 60px;" min=0 disabled />
                         <span class="details"> Departamento </span>
                         <input type="text" @bind="@Descripcion" />
-                        <button type="button" class="btn btn-sm btn-style" @onclick="async () => await OnSubmit()">Agregar</button>
+                        <button style="margin-top: 5px;" type="button" class="btn btn-sm btn-style" @onclick="async () => await OnSubmit()">Agregar</button>
                     </div>
                     @RenderMessage
                 </div>
@@ -42,12 +42,12 @@
     public async Task OnSubmit()
     {
         // Nuevo Departamento creado
-        Departamento newTipo = new()
+        Departamento newDept = new()
             {
                 CodDepartamento = CodDepartamento,
                 Descripcion = Descripcion
             };
-        Services.Add(newTipo);
+        Services.Add(newDept);
 
         IsValid = true;
         Disapear = false;

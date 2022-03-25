@@ -3,17 +3,29 @@
 @using Serilog
 
 <div class="body-form table-container-fix">
-    <h4>Agregar Tipos de Empleado</h4>
+    <h4>Agregar Cargos</h4>
     <div class="form-container">
         <div class="box">
             <div class="body-form">
                 <div class="form-container">
-                    <!--Tipo de Empleado-->
+                    <!-- Cargos -->
                     <div class="input-box show-more">
                         <span class="details"> Codigo </span>
-                        <input type="number" @bind="@CodEmpleado" style="width: 60px;" min=0 disabled />
-                        <span class="details"> Tipo de Empleado </span>
+                        <input type="number" @bind="@CodCargo" style="width: 60px;" min=0 disabled />
+                        <span class="details"> Cargo </span>
                         <input type="text" @bind="@Descripcion" />
+                        <span class="details"> Departamento </span>
+                        @if (Departamentos is not null)
+                        {
+                            <select @bind="@IdDept">
+
+                                @foreach (Departamento dept in Departamentos)
+                                {
+                                    <option value="@dept.CodDepartamento">@dept.Descripcion</option>
+                                }
+
+                            </select>
+                        }
                         <button style="margin-top: 5px;" type="button" class="btn btn-sm btn-style" @onclick="async () => await OnSubmit()">Agregar</button>
                     </div>
                     @RenderMessage
@@ -25,29 +37,34 @@
 
 @code {
     [CascadingParameter]
-    public TiposEmpleadoServices? Services { get; set; }
+    public CargosServices? Services { get; set; }
 
     public string Descripcion { get; set; } = string.Empty;
-    public int CodEmpleado { get; set; }
+    public int CodCargo { get; set; }
+
+    public List<Departamento> Departamentos { get; set; }
+    public int IdDept { get; set; }
 
     public bool IsValid { get; set; }
     public bool Disapear { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
-        CodEmpleado = await Services.CountAll();
-        CodEmpleado++;
+        CodCargo = await Services.CountAll();
+        CodCargo++;
+        Departamentos = await Services.Instance.GetAllAsync();
     }
 
     public async Task OnSubmit()
     {
         // Nuevo Tipo creado
-        TiposEmpleado newTipo = new()
+        Cargo newCargo = new()
             {
-                CodTipoEmpleado = CodEmpleado,
-                Descripcion = Descripcion
+                CodCargo = CodCargo,
+                Descripcion = Descripcion,
+                CodDepartamento = IdDept
             };
-        Services.Add(newTipo);
+        Services.Add(newCargo);
 
         IsValid = true;
         Disapear = false;

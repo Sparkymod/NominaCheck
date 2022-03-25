@@ -1,5 +1,45 @@
 ﻿@page "/"
 
-@using NominaCheck.Pages.Table
+@using System.Diagnostics.CodeAnalysis
+@using NominaCheck.Data.Models
 
-<DynamicTable />
+<!-- Table -->
+<div class="table-container-fix">
+    <table class="table-shadow table table-responsive table-bordered dataTable" id="ItemTable">
+        <thead>
+            <tr role="row" class="unselectable th-index-style">
+                <th rowspan="1" colspan="1">Nombre</th>
+                <th rowspan="1" colspan="1">Apellido</th>
+                <th rowspan="1" colspan="1">Telefono</th>
+                <th rowspan="1" colspan="1">Direccion</th>
+                <th rowspan="1" colspan="1">Email</th>
+                <th rowspan="1" colspan="1">Pago Mensual</th>
+                <th rowspan="1" colspan="1">Cargo</th>
+                <th rowspan="1" colspan="1">Empleado</th>
+            </tr>
+        </thead>
+        <tbody id="itemTable">
+            @if (Data is not null)
+            {
+                @foreach (var item in Data)
+                {
+                    <tr role="row" class="tr-index-style">
+                        <td class="col-xs-1">@item.Nombre</td>
+                        <td class="col-xs-1">@item.Apellido</td>
+                        <td class="col-xs-1">@item.Telefono</td>
+                        <td class="col-xs-2">@item.Direccion</td>
+                        <td class="col-xs-2">@item.Email</td>
+                        <td class="col-xs-2">@item.CodCargoNavigation.Descripcion</td>
+                        <td class="col-xs-1">@item.CodNominaNavigation.Monto</td>
+                        <td class="col-xs-1">@item.CodTipoEmpleadoNavigation.Descripcion</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter, AllowNull]
+    public IReadOnlyCollection<Empleado> Data { get; set; }
+}
