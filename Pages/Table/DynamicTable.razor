@@ -1,0 +1,28 @@
+﻿@using System.Diagnostics.CodeAnalysis
+
+<!-- Table -->
+<div class="table-container-fix">
+    <table class="table-shadow table table-responsive table-bordered dataTable" id="ItemTable">
+        <thead>
+            <tr role="row" class="unselectable th-index-style">
+                <th rowspan="1" colspan="1">Date</th>
+            </tr>
+        </thead>
+        <tbody id="itemTable">
+            @if (Data is not null)
+            {
+                @foreach (var item in Data)
+                {
+                    <tr role="row" class="tr-index-style">
+                        <td class="col-xs-2"></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter, AllowNull]
+    public IEnumerable<dynamic> Data { get; set; }
+}

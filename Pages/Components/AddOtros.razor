@@ -1,0 +1,19 @@
+﻿@page "/addOtros"
+
+@using NominaCheck.Data.Services
+@using NominaCheck.Pages.Components
+
+@inject TipoDepartamentoServices TipoDepartamentoServices
+@inject DepartamentoServices DepartamentoServices
+
+<div style="display: flex; gap: 3rem;">
+    <!-- Tipos empleado -->
+    <CascadingValue Value="@TipoDepartamentoServices">
+        <AddTiposEmpleado />
+    </CascadingValue>
+
+    <!-- Departamento -->
+    <CascadingValue Value="@DepartamentoServices">
+        <AddDepartamento />
+    </CascadingValue>
+</div>

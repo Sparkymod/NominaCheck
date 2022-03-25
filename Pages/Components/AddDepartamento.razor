@@ -1,0 +1,80 @@
+﻿@using NominaCheck.Data.Models
+@using NominaCheck.Data.Services
+@using Serilog
+
+<div class="body-form table-container-fix">
+    <h4>Agregar Departamentos</h4>
+    <div class="form-container">
+        <div class="box">
+            <div class="body-form">
+                <div class="form-container">
+                    <!--Departamentos-->
+                    <div class="input-box show-more">
+                        <span class="details"> Codigo </span>
+                        <input type="number" @bind="@CodDepartamento" style="width: 60px;" min=0 disabled />
+                        <span class="details"> Departamento </span>
+                        <input type="text" @bind="@Descripcion" />
+                        <button type="button" class="btn btn-sm btn-style" @onclick="async () => await OnSubmit()">Agregar</button>
+                    </div>
+                    @RenderMessage
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    public DepartamentoServices? Services { get; set; }
+
+    public string Descripcion { get; set; } = string.Empty;
+    public int CodDepartamento { get; set; }
+
+    public bool IsValid { get; set; }
+    public bool Disapear { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CodDepartamento = await Services.CountAll();
+        CodDepartamento++;
+    }
+
+    public async Task OnSubmit()
+    {
+        // Nuevo Departamento creado
+        Departamento newTipo = new()
+            {
+                CodDepartamento = CodDepartamento,
+                Descripcion = Descripcion
+            };
+        Services.Add(newTipo);
+
+        IsValid = true;
+        Disapear = false;
+
+        await Task.Delay(2000);
+
+        IsValid = false;
+        Disapear = true;
+    }
+
+    private RenderFragment RenderMessage => __builder =>
+    {
+        if (Disapear)
+        {
+            <div></div>
+        }
+        else if (IsValid)
+        {
+            <div style="display: flex; margin-top: 1px;">
+                <div class="alert alert-success" role="alert"> Agregado correctamente </div>
+            </div>
+        }
+        else
+        {
+            <div style="display: flex; margin-top: 1px;">
+                <div class="alert alert-danger" role="alert"> Hubo un error al ingresar los datos. </div>
+            </div>
+        }
+    };
+}
