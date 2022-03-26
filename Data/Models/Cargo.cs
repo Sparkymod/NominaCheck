@@ -12,6 +12,7 @@ namespace NominaCheck.Data.Models
 
         public int CodCargo { get; set; }
         public string Descripcion { get; set; } = null!;
+        public decimal? Monto { get; set; }
         public int CodDepartamento { get; set; }
 
         public virtual Departamento CodDepartamentoNavigation { get; set; } = null!;

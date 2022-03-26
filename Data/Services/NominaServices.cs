@@ -7,7 +7,7 @@ namespace NominaCheck.Data.Services
 {
     public class NominaServices
     {
-        public async void Add(Nomina entity)
+        public async Task Add(Nomina entity)
         {
             try
             {

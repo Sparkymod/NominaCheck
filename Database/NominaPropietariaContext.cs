@@ -57,6 +57,10 @@ namespace NominaCheck.Database
                     .IsUnicode(false)
                     .HasColumnName("descripcion");
 
+                entity.Property(e => e.Monto)
+                    .HasColumnType("money")
+                    .HasColumnName("monto");
+
                 entity.HasOne(d => d.CodDepartamentoNavigation)
                     .WithMany(p => p.Cargos)
                     .HasForeignKey(d => d.CodDepartamento)
@@ -118,19 +122,16 @@ namespace NominaCheck.Database
                     .HasColumnName("nombre")
                     .IsFixedLength();
 
-                entity.Property(e => e.Telefono).HasColumnName("telefono");
+                entity.Property(e => e.Telefono)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("telefono");
 
                 entity.HasOne(d => d.CodCargoNavigation)
                     .WithMany(p => p.Empleados)
                     .HasForeignKey(d => d.CodCargo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_cargo");
-
-                entity.HasOne(d => d.CodNominaNavigation)
-                    .WithMany(p => p.Empleados)
-                    .HasForeignKey(d => d.CodNomina)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_nomina");
 
                 entity.HasOne(d => d.CodTipoEmpleadoNavigation)
                     .WithMany(p => p.Empleados)
@@ -142,7 +143,7 @@ namespace NominaCheck.Database
             modelBuilder.Entity<FacturaProveedore>(entity =>
             {
                 entity.HasKey(e => e.CodFactura)
-                    .HasName("PK__factura___94EEA4104D4BD779");
+                    .HasName("PK__factura___94EEA410286330EC");
 
                 entity.ToTable("factura_proveedores");
 
@@ -166,13 +167,13 @@ namespace NominaCheck.Database
                     .WithMany(p => p.FacturaProveedores)
                     .HasForeignKey(d => d.CodProveedor)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__factura_p__cod_p__31EC6D26");
+                    .HasConstraintName("FK__factura_p__cod_p__3F466844");
             });
 
             modelBuilder.Entity<IngresosOtrosconcepto>(entity =>
             {
                 entity.HasKey(e => e.CodOtrosconceptos)
-                    .HasName("PK__ingresos__678CA83EF4FB4D7E");
+                    .HasName("PK__ingresos__678CA83EBA5CD0CD");
 
                 entity.ToTable("ingresos_otrosconceptos");
 
@@ -190,13 +191,13 @@ namespace NominaCheck.Database
                     .WithMany(p => p.IngresosOtrosconceptos)
                     .HasForeignKey(d => d.CodConcepto)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ingresos___cod_c__32E0915F");
+                    .HasConstraintName("FK__ingresos___cod_c__412EB0B6");
             });
 
             modelBuilder.Entity<IngresosServicio>(entity =>
             {
                 entity.HasKey(e => e.CodIngreso)
-                    .HasName("PK__ingresos__29CEDD366C683BEE");
+                    .HasName("PK__ingresos__29CEDD363C04A303");
 
                 entity.ToTable("ingresos_servicios");
 
@@ -220,7 +221,7 @@ namespace NominaCheck.Database
                     .WithMany(p => p.IngresosServicios)
                     .HasForeignKey(d => d.CodServicio)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ingresos___cod_s__33D4B598");
+                    .HasConstraintName("FK__ingresos___cod_s__4316F928");
             });
 
             modelBuilder.Entity<Nomina>(entity =>
@@ -229,31 +230,17 @@ namespace NominaCheck.Database
 
                 entity.ToTable("nomina");
 
-                entity.Property(e => e.CodNomina)
-                    .ValueGeneratedNever()
-                    .HasColumnName("cod_nomina");
-
-                entity.Property(e => e.CodEmpleado).HasColumnName("cod_empleado");
+                entity.Property(e => e.CodNomina).HasColumnName("cod_nomina");
 
                 entity.Property(e => e.FechaPago)
                     .HasColumnType("date")
                     .HasColumnName("fecha_pago");
-
-                entity.Property(e => e.Monto)
-                    .HasColumnType("money")
-                    .HasColumnName("monto");
-
-                entity.HasOne(d => d.CodEmpleadoNavigation)
-                    .WithMany(p => p.Nominas)
-                    .HasForeignKey(d => d.CodEmpleado)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_empleado");
             });
 
             modelBuilder.Entity<OtrosConcepto>(entity =>
             {
                 entity.HasKey(e => e.CodConcepto)
-                    .HasName("PK__otros_co__99DD44B0B80C5407");
+                    .HasName("PK__otros_co__99DD44B02C7E60F9");
 
                 entity.ToTable("otros_conceptos");
 
@@ -271,7 +258,7 @@ namespace NominaCheck.Database
             modelBuilder.Entity<PagoEmpleado>(entity =>
             {
                 entity.HasKey(e => e.CodPago)
-                    .HasName("PK__pago_emp__CB1571380DE4E134");
+                    .HasName("PK__pago_emp__CB1571386E550685");
 
                 entity.ToTable("pago_empleados");
 
@@ -295,7 +282,7 @@ namespace NominaCheck.Database
             modelBuilder.Entity<Proveedore>(entity =>
             {
                 entity.HasKey(e => e.CodProveedor)
-                    .HasName("PK__proveedo__D4A662EBB92D8BB0");
+                    .HasName("PK__proveedo__D4A662EB33E1F1EA");
 
                 entity.ToTable("proveedores");
 
@@ -325,7 +312,7 @@ namespace NominaCheck.Database
             modelBuilder.Entity<Servicio>(entity =>
             {
                 entity.HasKey(e => e.CodServicio)
-                    .HasName("PK__servicio__9BF23A49D3DD9B0C");
+                    .HasName("PK__servicio__9BF23A4917C0B7B6");
 
                 entity.ToTable("servicios");
 

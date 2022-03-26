@@ -2,6 +2,11 @@
 
 @using System.Diagnostics.CodeAnalysis
 @using NominaCheck.Data.Models
+@using NominaCheck.Data.Services
+
+@inject EmpleadoServices EmpleadoServices
+@inject CargosServices CargosServices
+@inject TiposEmpleadoServices TiposEmpleadoServices
 
 <!-- Table -->
 <div class="table-container-fix">
@@ -13,8 +18,8 @@
                 <th rowspan="1" colspan="1">Telefono</th>
                 <th rowspan="1" colspan="1">Direccion</th>
                 <th rowspan="1" colspan="1">Email</th>
-                <th rowspan="1" colspan="1">Pago Mensual</th>
                 <th rowspan="1" colspan="1">Cargo</th>
+                <th rowspan="1" colspan="1">Pago Mensual</th>
                 <th rowspan="1" colspan="1">Empleado</th>
             </tr>
         </thead>
@@ -29,9 +34,9 @@
                         <td class="col-xs-1">@item.Telefono</td>
                         <td class="col-xs-2">@item.Direccion</td>
                         <td class="col-xs-2">@item.Email</td>
-                        <td class="col-xs-2">@item.CodCargoNavigation.Descripcion</td>
-                        <td class="col-xs-1">@item.CodNominaNavigation.Monto</td>
-                        <td class="col-xs-1">@item.CodTipoEmpleadoNavigation.Descripcion</td>
+                        <td class="col-xs-2">@Cargos?.Where(x => x.CodCargo == item.CodCargo).First().Descripcion</td>
+                        <td class="col-xs-1">@Cargos?.Where(x => x.CodCargo == item.CodCargo).First().Monto</td>
+                        <td class="col-xs-1">@TiposEmpleados?.Where(x => x.CodTipoEmpleado == item.CodTipoEmpleado).First().Descripcion</td>
                     </tr>
                 }
             }
@@ -40,6 +45,14 @@
 </div>
 
 @code {
-    [Parameter, AllowNull]
-    public IReadOnlyCollection<Empleado> Data { get; set; }
+    public IReadOnlyCollection<Empleado>? Data { get; set; }
+    public IReadOnlyCollection<Cargo>? Cargos { get; set; }
+    public IReadOnlyCollection<TiposEmpleado>? TiposEmpleados { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Data = await EmpleadoServices.GetAllAsync();
+        Cargos = await CargosServices.GetAllAsync();
+        TiposEmpleados = await TiposEmpleadoServices.GetAllAsync();
+    }
 }
