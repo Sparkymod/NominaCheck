@@ -36,8 +36,7 @@ namespace NominaCheck
 
         public static class Paths
         {
-            public static readonly string SOLUTION_DIR = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../.."));
-            public static readonly string PRODUCTION_DIR = "../";
+            public static readonly string PRODUCTION_DIR = Environment.CurrentDirectory+"/";
         }
 
         // Dot Environment Settings.
@@ -47,7 +46,9 @@ namespace NominaCheck
 
             public static void Load(string filepath = ".env")
             {
-                FilePath = IsDevelopingMode() ? Path.Combine(Paths.SOLUTION_DIR, filepath) : Path.Combine(Paths.PRODUCTION_DIR, filepath);
+                FilePath = Path.Combine(Paths.PRODUCTION_DIR, filepath);
+
+                Log.Logger.Information(Environment.CurrentDirectory);
 
                 if (!File.Exists(FilePath))
                 {

@@ -21,6 +21,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
 }
 
+Settings.DotEnv.Load();
+
 app.UseStaticFiles();
 app.UseRouting();
 app.MapBlazorHub();
