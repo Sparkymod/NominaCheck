@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Microsoft.JSInterop;
+using System.Reflection;
 
 namespace NominaCheck.Data.Extensions
 {
@@ -12,5 +13,10 @@ namespace NominaCheck.Data.Extensions
                 services.AddTransient(service);
             }
         }
+
+        public static ValueTask<object> SaveAs(this IJSRuntime js, string filename, byte[] data) => js.InvokeAsync<object>(
+   "saveAsFile",
+   filename,
+   Convert.ToBase64String(data));
     }
 }

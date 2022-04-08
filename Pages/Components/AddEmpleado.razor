@@ -104,12 +104,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Cargos = await CargosServices.GetAllAsync();
-        TiposEmpleados = await TiposEmpleadoServices.GetAllAsync();
-        CodEmpleados = await EmpleadoServices.CountAll();
-        CodEmpleados++;
-        CodNomina = await NominaServices.CountAll();
-        CodNomina++;
+        try
+        {
+            Cargos = await CargosServices.GetAllAsync();
+            TiposEmpleados = await TiposEmpleadoServices.GetAllAsync();
+            CodEmpleados = await EmpleadoServices.CountAll();
+            CodEmpleados++;
+            CodNomina = await NominaServices.CountAll();
+            CodNomina++;
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     public async void OnSelection()

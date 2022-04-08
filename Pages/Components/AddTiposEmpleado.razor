@@ -35,8 +35,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        CodEmpleado = await Services.CountAll();
-        CodEmpleado++;
+        try
+        {
+            CodEmpleado = await Services.CountAll();
+            CodEmpleado++;
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     public async Task OnSubmit()

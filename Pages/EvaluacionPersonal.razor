@@ -1,0 +1,277 @@
+﻿@page "/evaluacion"
+
+@using System.IO
+@using NominaCheck.Data.Services
+@using NominaCheck.Pages.Components
+
+@inject NavigationManager Navigation
+@inject Microsoft.JSInterop.IJSRuntime JS
+@inject FormServices Service
+
+<PageTitle>Formulario Evaluación del Periodo Probatorio</PageTitle>
+
+<EditForm Model=this OnValidSubmit="@ExportToPdf">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div style="display:flex;">
+            <!-- Form -->
+            <div class="block">
+                <div class="header-block">
+                    <div class="header">
+                        <!-- LOGO -->
+                        <div class="logo row-2">
+                            <img src="img/logo.png" width="230px" height="80px" />
+                        </div>
+                        <!-- Info Right -->
+                        <div class="header-info-right">
+                            <h4>Formulario Evaluación del Periodo Probatorio</h4>
+                            <p class="header-code"><b>Código: FO-RH-EPP-@Version</b></p>
+                            <p>Fecha de Creación: 20/01/22</p>
+                            <p>Fecha de Actualización: @string.Format("{0,2:00}/{1,4:00}", DateTime.Today.Month, DateTime.Today.Year)</p>
+                            <p>Fecha Próxima Actualización: @string.Format("{0,2:00}/{1,4:00}", DateTime.Today.Month, DateTime.Today.AddYears(1).Year)</p>
+                        </div>
+                    </div>
+                    <!-- Fecha de Solicitud -->
+                    <div class="header-info-right">
+                        <h5>Fecha de Solicitud:</h5>
+                        <input style="margin-top: -5px;" type="date" @bind=FechaSolicitud />
+                    </div>
+                </div>
+                <div class="content">
+                    <!-- Datos Generales -->
+                    <div class="component" style="margin-bottom: 10px;">
+                        <h5>DATOS GENERALES</h5>
+                        <div class="row">
+                            <!-- Nombre: -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for=""><b>Nombre del evaluado:</b></label>
+                                    <ValidationSummary Model=this />
+                                    <InputText @bind-Value="@Nombre" type="text" class="form-control" placeholder="Nombre completo del evaluado." required />
+                                </div>
+                            </div>
+                            <!-- Cargo: -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for=""><b>Cargo que ocupa:</b> </label>
+                                    <ValidationSummary Model=this />
+                                    <InputText @bind-Value="@Cargo" type="text" class="form-control"
+                                           placeholder="Coloque el cargo que ocupa el evaluado." required />
+                                </div>
+                            </div>
+                            <!-- Período probatorio: -->
+                            <div class="col-md-4">
+                                <label for=""><b>Período probatorio:</b> </label>
+                                <div class="form-group" style="display:flex; justify-content: space-between;">
+                                    <div>
+                                        <label for=""><b>Desde:</b> </label>
+                                        <input type="date" @bind=FechaStart
+                                               placeholder="Coloque el cargo que ocupa el evaluado." />
+                                    </div>
+                                    <div>
+                                        <label for=""><b>Hasta:</b> </label>
+                                        <input type="date" @bind=FechaEnd
+                                               placeholder="Coloque el cargo que ocupa el evaluado." />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Supervisor: -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for=""><b>Nombre del supervisor:</b></label>
+                                    <ValidationSummary Model=this />
+                                    <InputText @bind-Value="@Supervisor" type="text" class="form-control"
+                                           placeholder="Coloque el nombre del supervisor inmediato del evaluado." required />
+                                </div>
+                            </div>
+                            <!-- Departamento: -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for=""><b>Departamento:</b></label>
+                                    <ValidationSummary Model=this />
+                                    <InputText @bind-Value="@Departamento" type="text" class="form-control"
+                                           placeholder="Coloque el departamento al que pertenece el evaluado." required />
+                                </div>
+                            </div>
+                            <!-- Dirección: -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for=""><b>Dirección:</b></label>
+                                    <ValidationSummary Model=this />
+                                    <InputText @bind-Value="Direccion" type="text" class="form-control"
+                                           placeholder="Coloque la dirección al que pertenece el evaluado." required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Evaluaciones -->
+                    <div class="component">
+                        <h5>FACTORES POR EVALUAR</h5>
+                        <CascadingValue Value=@Service>
+                            <!-- Seccion 1 -->
+                            <Seccion Titulo="Adaptación"
+                                     Descripcion="Aceptación de los procedimientos, normas, políticas de la institución."
+                                     FormSection="1"
+                                     Results=UpdateResults />
+                            <!-- Seccion 2 -->
+                            <Seccion Titulo="Relación con supervisor directo"
+                                     Descripcion="Demuestra respeto y aceptación. Cumple con las funciones delegadas por su superior."
+                                     FormSection="2"
+                                     Results=UpdateResults />
+                            <!-- Seccion 3 -->
+                            <Seccion Titulo="Calidad del trabajo"
+                                     Descripcion="Demuestra interés en realizar el trabajo con nitidez, precisión y eficiencia. Rara vez requiere de correcciones."
+                                     FormSection="3"
+                                     Results=UpdateResults />
+                            <!-- Seccion 4 -->
+                            <Seccion Titulo="Rendimiento en el trabajo"
+                                     Descripcion="Rapidez en ejecución de trabajo."
+                                     FormSection="4"
+                                     Results=UpdateResults />
+                            <!-- Seccion 5 -->
+                            <Seccion Titulo="Trabajo en equipo"
+                                     Descripcion="Muestra compromiso, coordinación y participación, a fin de lograr un resultado en conjunto, sin perseguir objetivos individuales."
+                                     FormSection="5"
+                                     Results=UpdateResults />
+                            <!-- Seccion 6 -->
+                            <Seccion Titulo="Relaciones interpersonales"
+                                     Descripcion="Demuestra cortesía, capacidad de interactuar positivamente con sus compañeros y clientes externos. desenvolvimiento adecuado en manejo de conflictos."
+                                     FormSection="6"
+                                     Results=UpdateResults />
+                            <!-- Seccion 7 -->
+                            <Seccion Titulo="Comunicación"
+                                     Descripcion="Muestra habilidades para comunicarse de manera eficiente, transmite ideas verbales y escrito con mucha claridad y coherencia. Mantiene una actitud receptiva hacia los puntos de vista de los demás."
+                                     FormSection="7"
+                                     Results=UpdateResults />
+                            <!-- Seccion 8 -->
+                            <Seccion Titulo="Responsabilidad"
+                                     Descripcion="Interés en cumplir eficientemente con los trabajos asignados. Administración cuidadosa de informaciones confidenciales."
+                                     FormSection="8"
+                                     Results=UpdateResults />
+                            <!-- Seccion 9 -->
+                            <Seccion Titulo="Interés por el aprendizaje"
+                                     Descripcion="Interés en adquirir nuevas habilidades, deseos de superación y mejoría en conocimientos."
+                                     FormSection="9"
+                                     Results=UpdateResults />
+                            <!-- Seccion 10 -->
+                            <Seccion Titulo="Capacidad de análisis"
+                                     Descripcion="Demuestra aptitudes para resolver problemas difíciles y plantear posibles soluciones."
+                                     FormSection="10"
+                                     Results=UpdateResults />
+                            <!-- Seccion 11 -->
+                            <Seccion Titulo="Criterio profesional o técnico"
+                                     Descripcion="Propone ideas razonables, tomando en consideración la ética profesional."
+                                     FormSection="11"
+                                     Results=UpdateResults />
+                            <!-- Seccion 12 -->
+                            <Seccion Titulo="Cumplimiento disciplinario"
+                                     Descripcion="Demuestra adecuados hábitos de comportamiento. Cumplimiento de normas y políticas establecidas, incluyendo asistencia y puntualidad."
+                                     FormSection="12"
+                                     Results=UpdateResults />
+                            <!-- Seccion 13 -->
+                            <Seccion Titulo="Compromiso"
+                                     Descripcion="Identificación con los valores y objetivos institucionales. Muestra lealtad, membresía e interés ante la institución."
+                                     FormSection="13"
+                                     Results=UpdateResults />
+                            <!-- Seccion 14 -->
+                            <Seccion Titulo="Capacidad de trabajar bajo presión"
+                                     Descripcion="Capacidad de responder a diferentes requerimientos con un nivel de desempeño satisfactorio."
+                                     FormSection="14"
+                                     Results=UpdateResults />
+                            <!-- Seccion 15 -->
+                            <Seccion Titulo="Flexibilidad"
+                                     Descripcion="Capacidad de adaptación ante los cambios."
+                                     FormSection="15"
+                                     Results=UpdateResults />
+                            <!-- Seccion 16 -->
+                            <Seccion Titulo="Liderazgo"
+                                     Descripcion="Demuestra habilidades de influir, apoyar y motivar a los demás, para el logro de objetivos comunes."
+                                     FormSection="16"
+                                     Results=UpdateResults />
+                            <!-- Seccion 17 -->
+                            <Seccion Titulo="Iniciativa"
+                                     Descripcion="Habilidad de anticipación a la búsqueda de respuestas, proponiendo voluntariamente ideas útiles para conseguir mejores resultados."
+                                     FormSection="17"
+                                     Results=UpdateResults />
+                            <!-- Seccion 18 -->
+                            <Seccion Titulo="Organización"
+                                     Descripcion="Orden y Limpieza de su área de trabajo."
+                                     FormSection="18"
+                                     Results=UpdateResults />
+                            <!-- Seccion 19 -->
+                            <Seccion Titulo="Actitud hacia la institución"
+                                     Descripcion="Demuestra inclinación y entusiasmo con la naturaleza de la institución."
+                                     FormSection="19"
+                                     Results=UpdateResults />
+                            <!-- Seccion 20 -->
+                            <Seccion Titulo="Apariencia Personal"
+                                     Descripcion="Vestimenta, higiene personal e impresión que produce."
+                                     FormSection="20"
+                                     Results=UpdateResults />
+                            <div class="seccion-bottom"></div>
+                        </CascadingValue>
+                        <div style="margin-top: 10px;">
+                            <h5>Puntuación Total: @Results</h5>
+                        </div>
+                    </div>
+                    <div class="component">
+                        <!-- Datos Extras en Comentarios. -->
+                        <div class="row">
+                            <!-- Habilidad que identifica en el evaluado. -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for=""><b>Habilidad que identifica en el evaluado:</b></label>
+                                    <input @bind="@Habilidad" type="text" class="form-control" placeholder=" Coloque un comentario, de lo contrario coloque N/A." />
+                                </div>
+                            </div>
+                            <!-- Oportunidad de mejora que identifica en el evaluado. -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for=""><b>Oportunidad de mejora que identifica en el evaluado:</b> </label>
+                                    <input @bind="@Oportunidad" type="text" class="form-control"
+                                           placeholder=" Coloque un comentario, de lo contrario coloque N/A." />
+                                </div>
+                            </div>
+                            <!-- Comentarios generales del supervisor inmediato. -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for=""><b>Comentarios generales del supervisor inmediato:</b></label>
+                                    <input @bind="@ComentarioSupervisor" type="text" class="form-control"
+                                           placeholder=" Coloque un comentario, de lo contrario coloque N/A." />
+                                </div>
+                            </div>
+                            <!-- Comentarios del evaluado. -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for=""><b>Comentarios del evaluado:</b></label>
+                                    <input @bind="@ComentarioEvaluado" type="text" class="form-control"
+                                           placeholder=" Coloque un comentario, de lo contrario coloque N/A." />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <!-- Firmas. -->
+                    <div class="component">
+                        <div class="firmas-block">
+                            <div class="firmas">
+                                <p>&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;</p>
+                                <h6><i>Firma del Superior Inmediato</i></h6>
+                            </div>
+                            <div class="firmas">
+                                <p>&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;</p>
+                                <h6><i>Firma del Evaluado</i></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="btn-export">
+            <button type="submit" class="btn btn-primary">Export to PDF</button>
+        </div>
+        <br />
+        <br />
+    </div>
+</EditForm>

@@ -1,0 +1,101 @@
+﻿@using NominaCheck.Data.Models
+@using NominaCheck.Data.Services
+<div class="seccion">
+    <p><b>@Titulo: </b>@Descripcion </p>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>
+                    <input type="radio" name="@FormSection" @onclick=" () => OnClick(1)" />
+                    Muy por debajo del nivel superior
+                </label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>
+                    <input type="radio" name="@FormSection" @onclick=" () => OnClick(2)" />
+                    Por debajo del nivel esperado
+                </label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>
+                    <input type="radio" name="@FormSection" @onclick=" () => OnClick(3)" />
+                    De acuerdo al nivel esperado
+                </label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>
+                    <input type="radio" name="@FormSection" @onclick=" () => OnClick(4)" />
+                    Superior al nivel esperado
+                </label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label style="padding-right: 55px;">
+                    <input type="radio" name="@FormSection" @onclick=" () => OnClick(5)" />
+                    Sobresaliente. Muy superior al nivel esperado
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    public FormServices Service { get; set; }
+    [Parameter]
+    public string Titulo { get; set; } = string.Empty;
+    [Parameter]
+    public string Descripcion { get; set; } = string.Empty;
+    [Parameter]
+    public string FormSection { get; set; } = "desc";
+    [Parameter]
+    public EventCallback<int> Results { get; set; }
+
+    public SectionForm ActiveForm = new();
+
+    protected override void OnInitialized()
+    {
+        Service.Forms.Add(ActiveForm);
+        base.OnInitialized();
+    }
+
+    public async Task OnClick(int answer)
+    {
+        ActiveForm.Selection = answer;
+        switch (answer)
+        {
+            case 1:
+                ActiveForm.Answer1 = 1;
+                Service.Sum();
+                await Results.InvokeAsync(Service.Results);
+                break;
+            case 2:
+                ActiveForm.Answer1 = 2;
+                Service.Sum();
+                await Results.InvokeAsync(Service.Results);
+                break;
+            case 3:
+                ActiveForm.Answer1 = 3;
+                Service.Sum();
+                await Results.InvokeAsync(Service.Results);
+                break;
+            case 4:
+                ActiveForm.Answer1 = 4;
+                Service.Sum();
+                await Results.InvokeAsync(Service.Results);
+                break;
+            case 5:
+                ActiveForm.Answer1 = 5;
+                Service.Sum();
+                await Results.InvokeAsync(Service.Results);
+                break;
+        }
+    }
+}

@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Helpers\" />
-    <Folder Include="Data\Models\" />
     <Folder Include="SQL\" />
     <Folder Include="Shared\" />
   </ItemGroup>
@@ -20,6 +19,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Select.HtmlToPdf.NetCore" Version="22.1.0" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />

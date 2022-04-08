@@ -51,8 +51,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Data = await EmpleadoServices.GetAllAsync();
-        Cargos = await CargosServices.GetAllAsync();
-        TiposEmpleados = await TiposEmpleadoServices.GetAllAsync();
+        try
+        {
+            Data = await EmpleadoServices.GetAllAsync();
+            Cargos = await CargosServices.GetAllAsync();
+            TiposEmpleados = await TiposEmpleadoServices.GetAllAsync();
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 }
